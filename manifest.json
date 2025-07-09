@@ -1,4 +1,7 @@
 {
+  "display_override": ["fullscreen", "minimal-ui"],
+  "display": "standalone"
+{
   "name": "Solver 2x2 by Randy",
   "short_name": "Solver 2x2",
   "start_url": "index.html",
@@ -17,4 +20,5 @@
       "type": "image/png"
     }
   ]
+}
 }
