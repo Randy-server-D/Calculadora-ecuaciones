@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solver 2x2 by Randy</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon-192.png">
+  <meta name="theme-color" content="#d00000">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #e0eafc, #cfdef3);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .app {
+      background: white;
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      width: 90%;
+      max-width: 400px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .row input {
+      width: 30%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1em;
+      text-align: center;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #007bff;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.1em;
+      color: white;
+      margin-top: 15px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    #resultado {
+      margin-top: 20px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h2>Resuelve ecuaciones 2x2</h2>
+    <div class="row">
+      <input type="number" id="a1" placeholder="a₁">
+      <input type="number" id="b1" placeholder="b₁">
+      <input type="number" id="c1" placeholder="c₁">
+    </div>
+    <div class="row">
+      <input type="number" id="a2" placeholder="a₂">
+      <input type="number" id="b2" placeholder="b₂">
+      <input type="number" id="c2" placeholder="c₂">
+    </div>
+    <button onclick="resolver()">Resolver</button>
+    <div id="resultado"></div>
+  </div>
+  <script>
+    function resolver() {
+      const a1 = parseFloat(document.getElementById('a1').value);
+      const b1 = parseFloat(document.getElementById('b1').value);
+      const c1 = parseFloat(document.getElementById('c1').value);
+      const a2 = parseFloat(document.getElementById('a2').value);
+      const b2 = parseFloat(document.getElementById('b2').value);
+      const c2 = parseFloat(document.getElementById('c2').value);
+      const det = a1 * b2 - a2 * b1;
+      if (isNaN(a1) || isNaN(b1) || isNaN(c1) || isNaN(a2) || isNaN(b2) || isNaN(c2)) {
+        document.getElementById('resultado').innerText = "Por favor completa todos los campos.";
+        return;
+      }
+      if (det === 0) {
+        document.getElementById('resultado').innerText = "No hay solución única.";
+      } else {
+        const x = (c1 * b2 - c2 * b1) / det;
+        const y = (a1 * c2 - a2 * c1) / det;
+        document.getElementById('resultado').innerText = `x = ${x.toFixed(3)} | y = ${y.toFixed(3)}`;
+      }
+    }
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log("✅ Service Worker registrado"))
+        .catch(err => console.error("❌ Error al registrar Service Worker:", err));
+    }
+  </script>
+</body>
+</html>
