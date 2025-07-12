@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Solver 2x2 by Randy</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icon-192.png">
   <meta name="theme-color" content="#d00000">
@@ -86,10 +87,81 @@
       <input type="number" id="c2" placeholder="c₂">
     </div>
     <button onclick="resolver()">Resolver</button>
-    <div id="resultado"></div>
+    <div id="resultado"></div> 
+    <canvas id="grafica" width="400" height="400" style="margin-top: 20px;"></canvas>
   </div>
   <script>
-    function resolver() {
+    function resolver() 
+      const ctx = document.getElementById('grafica').getContext('2d');
+
+// Función para generar puntos de una recta
+function puntosRecta(a, b, c) {
+  const x1 = -10;
+  const x2 = 10;
+  const y1 = (c - a * x1) / b;
+  const y2 = (c - a * x2) / b;
+  return [
+    {x: x1, y: y1},
+    {x: x2, y: y2}
+  ];
+}
+
+// Borrar gráfico anterior si existe
+if (window.graficaEjes) {
+  window.graficaEjes.destroy();
+}
+
+// Obtener los puntos para cada ecuación
+const puntos1 = puntosRecta(a1, b1, c1);
+const puntos2 = puntosRecta(a2, b2, c2);
+
+// Dibujar en canvas
+window.graficaEjes = new Chart(ctx, {
+  type: 'line',
+  data: {
+    datasets: [
+      {
+        label: 'Ecuación 1',
+        data: puntos1,
+        borderColor: 'red',
+        fill: false,
+        tension: 0
+      },
+      {
+        label: 'Ecuación 2',
+        data: puntos2,
+        borderColor: 'blue',
+        fill: false,
+        tension: 0
+      },
+      {
+        label: 'Solución',
+        data: [{x: x, y: y}],
+        borderColor: 'green',
+        backgroundColor: 'green',
+        pointRadius: 6,
+        type: 'scatter'
+      }
+    ]
+  },
+  options: {
+    scales: {
+      x: {
+        type: 'linear',
+        position: 'bottom',
+        title: { display: true, text: 'x' },
+        min: -10,
+        max: 10
+      },
+      y: {
+        title: { display: true, text: 'y' },
+        min: -10,
+        max: 10
+      }
+    }
+  }
+});
+    {
       const a1 = parseFloat(document.getElementById('a1').value);
       const b1 = parseFloat(document.getElementById('b1').value);
       const c1 = parseFloat(document.getElementById('c1').value);
