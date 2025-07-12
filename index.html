@@ -91,101 +91,103 @@
     <canvas id="grafica" width="400" height="400" style="margin-top: 20px;"></canvas>
   </div>
   <script>
-    function resolver() 
-      const ctx = document.getElementById('grafica').getContext('2d');
+function resolver() {
+  const a1 = parseFloat(document.getElementById('a1').value);
+  const b1 = parseFloat(document.getElementById('b1').value);
+  const c1 = parseFloat(document.getElementById('c1').value);
+  const a2 = parseFloat(document.getElementById('a2').value);
+  const b2 = parseFloat(document.getElementById('b2').value);
+  const c2 = parseFloat(document.getElementById('c2').value);
+  const det = a1 * b2 - a2 * b1;
+  let x, y;
 
-// Función para generar puntos de una recta
-function puntosRecta(a, b, c) {
-  const x1 = -10;
-  const x2 = 10;
-  const y1 = (c - a * x1) / b;
-  const y2 = (c - a * x2) / b;
-  return [
-    {x: x1, y: y1},
-    {x: x2, y: y2}
-  ];
-}
-
-// Borrar gráfico anterior si existe
-if (window.graficaEjes) {
-  window.graficaEjes.destroy();
-}
-
-// Obtener los puntos para cada ecuación
-const puntos1 = puntosRecta(a1, b1, c1);
-const puntos2 = puntosRecta(a2, b2, c2);
-
-// Dibujar en canvas
-window.graficaEjes = new Chart(ctx, {
-  type: 'line',
-  data: {
-    datasets: [
-      {
-        label: 'Ecuación 1',
-        data: puntos1,
-        borderColor: 'red',
-        fill: false,
-        tension: 0
-      },
-      {
-        label: 'Ecuación 2',
-        data: puntos2,
-        borderColor: 'blue',
-        fill: false,
-        tension: 0
-      },
-      {
-        label: 'Solución',
-        data: [{x: x, y: y}],
-        borderColor: 'green',
-        backgroundColor: 'green',
-        pointRadius: 6,
-        type: 'scatter'
-      }
-    ]
-  },
-  options: {
-    scales: {
-      x: {
-        type: 'linear',
-        position: 'bottom',
-        title: { display: true, text: 'x' },
-        min: -10,
-        max: 10
-      },
-      y: {
-        title: { display: true, text: 'y' },
-        min: -10,
-        max: 10
-      }
-    }
+  if (isNaN(a1) || isNaN(b1) || isNaN(c1) || isNaN(a2) || isNaN(b2) || isNaN(c2)) {
+    document.getElementById('resultado').innerText = "Por favor completa todos los campos.";
+    return;
   }
-});
+  if (det === 0) {
+    document.getElementById('resultado').innerText = "No hay solución única.";
+    x = null;
+    y = null;
+  } else {
+    x = (c1 * b2 - c2 * b1) / det;
+    y = (a1 * c2 - a2 * c1) / det;
+    document.getElementById('resultado').innerText = `x = ${x.toFixed(2)} | y = ${y.toFixed(2)}`;
+  }
+
+  const ctx = document.getElementById('grafica').getContext('2d');
+  function puntosRecta(a, b, c) {
+    const x1 = -10;
+    const x2 = 10;
+    const y1 = (c - a * x1) / b;
+    const y2 = (c - a * x2) / b;
+    return [
+      {x: x1, y: y1},
+      {x: x2, y: y2}
+    ];
+  }
+
+  if (window.graficaEjes) {
+    window.graficaEjes.destroy();
+  }
+
+  const puntos1 = puntosRecta(a1, b1, c1);
+  const puntos2 = puntosRecta(a2, b2, c2);
+
+  let datasets = [
     {
-      const a1 = parseFloat(document.getElementById('a1').value);
-      const b1 = parseFloat(document.getElementById('b1').value);
-      const c1 = parseFloat(document.getElementById('c1').value);
-      const a2 = parseFloat(document.getElementById('a2').value);
-      const b2 = parseFloat(document.getElementById('b2').value);
-      const c2 = parseFloat(document.getElementById('c2').value);
-      const det = a1 * b2 - a2 * b1;
-      if (isNaN(a1) || isNaN(b1) || isNaN(c1) || isNaN(a2) || isNaN(b2) || isNaN(c2)) {
-        document.getElementById('resultado').innerText = "Por favor completa todos los campos.";
-        return;
-      }
-      if (det === 0) {
-        document.getElementById('resultado').innerText = "No hay solución única.";
-      } else {
-        const x = (c1 * b2 - c2 * b1) / det;
-        const y = (a1 * c2 - a2 * c1) / det;
-        document.getElementById('resultado').innerText = `x = ${x.toFixed(2)} | y = ${y.toFixed(2)}`;
+      label: 'Ecuación 1',
+      data: puntos1,
+      borderColor: 'red',
+      fill: false,
+      tension: 0
+    },
+    {
+      label: 'Ecuación 2',
+      data: puntos2,
+      borderColor: 'blue',
+      fill: false,
+      tension: 0
+    }
+  ];
+  if (x !== null && y !== null) {
+    datasets.push({
+      label: 'Solución',
+      data: [{x: x, y: y}],
+      borderColor: 'green',
+      backgroundColor: 'green',
+      pointRadius: 6,
+      type: 'scatter'
+    });
+  }
+
+  window.graficaEjes = new Chart(ctx, {
+    type: 'line',
+    data: { datasets },
+    options: {
+      scales: {
+        x: {
+          type: 'linear',
+          position: 'bottom',
+          title: { display: true, text: 'x' },
+          min: -10,
+          max: 10
+        },
+        y: {
+          title: { display: true, text: 'y' },
+          min: -10,
+          max: 10
+        }
       }
     }
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js')
-        .then(() => console.log("✅ Service Worker registrado"))
-        .catch(err => console.error("❌ Error al registrar Service Worker:", err));
-    }
-  </script>
+  });
+}
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js')
+    .then(() => console.log("✅ Service Worker registrado"))
+    .catch(err => console.error("❌ Error al registrar Service Worker:", err));
+}
+</script>
 </body>
 </html>
