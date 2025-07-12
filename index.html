@@ -13,7 +13,7 @@
       margin: 0;
       padding: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom right, #F5F5DC, #fc79c4);
+      background-image: url("fondo.jpg");
       display: flex;
       justify-content: center;
       align-items: center;
@@ -71,14 +71,15 @@
 <body>
   <div class="app">
     <h2>Resuelve ecuaciones de 2 incognitas</h2>
+    <p>Ingresa los coeficientes para las ecuaciones:</p>
     <div class="row">
-      <input type="number" id="a1" placeholder="a₁">
-      <input type="number" id="b1" placeholder="b₁">
+      <input type="number" id="a1" placeholder="a₁">x +
+      <input type="number" id="b1" placeholder="b₁">y =
       <input type="number" id="c1" placeholder="c₁">
     </div>
     <div class="row">
-      <input type="number" id="a2" placeholder="a₂">
-      <input type="number" id="b2" placeholder="b₂">
+      <input type="number" id="a2" placeholder="a₂">x +
+      <input type="number" id="b2" placeholder="b₂">y =
       <input type="number" id="c2" placeholder="c₂">
     </div>
     <button onclick="resolver()">Resolver</button>
