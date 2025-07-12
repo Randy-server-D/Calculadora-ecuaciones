@@ -4,8 +4,8 @@ self.addEventListener('install', function(e) {
       return cache.addAll([
         'index.html',
         'manifest.json',
-        'icon-192.png',
-        'icon-512.png'
+        'icon-192.jpg',
+        'icon-512.jpg'
       ]);
     })
   );
